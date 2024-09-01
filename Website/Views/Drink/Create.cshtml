@@ -1,0 +1,38 @@
+﻿@model Drink
+@{
+    ViewData["Title"] = "Create Drink";
+}
+<form asp-controller="Drink" asp-action="Create">
+    <div class="d-flex align-items-center mb-2">
+        <h4 class="me-auto mb-0">Create Drink</h4>
+        <a class="btn btn-outline-primary btn-sm m-1" role="button" asp-controller="Drink" asp-action="Index">Back</a>
+        <input type="submit" value="Create" class="btn btn-primary btn-sm m-1" />
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+            <div class="row mb-3 g-3 align-items-center">
+                <div class="col-sm-2">
+                    <label asp-for="Name" class="col-form-label"></label>
+                </div>
+                <div class="col-sm-3">
+                    <input asp-for="Name" class="form-control" />
+                </div>
+                <div class="col-auto">
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row mb-3 g-3 align-items-center">
+                <div class="col-sm-2">
+                    <label asp-for="Description" class="col-form-label"></label>
+                </div>
+                <div class="col-sm-3">
+                    <input asp-for="Description" class="form-control" />
+                </div>
+                <div class="col-auto">
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
