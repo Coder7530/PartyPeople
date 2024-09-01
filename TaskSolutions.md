@@ -21,15 +21,16 @@ Event's start and end date string format had to be changed from `hh:mm`(12h) to 
 Also spotted the event Id was not passed down to the event update procedure. 
 
 ### Task 3
-Koderly would like to track which employees are attending which events. Can you extend the PartyPeople application to add this functionality?
-
 The approach I will take is to create attendees section per event to hold the employees that reserved a slot. 
 
 I will need to create an SQL table to store the association between events and employees (one to many relationship).
 
-And will need procedures to query, add and remove event employeees. Plus updating the Event Edit view and the Controller relevant methods.
+And will need procedures to query, add and remove event employees. Plus updating the Event Edit view and the Controller relevant methods.
 
 ### Task 4
+Similarly to the previous task SQL scripts were created to CRUD drinks, altered the employee table to include the fav drink selection.
+
+Created drink MVC and altered the Employee components to include the fav drink selection.
 
 ### Task 5
 
