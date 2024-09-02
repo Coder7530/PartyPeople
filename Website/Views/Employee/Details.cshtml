@@ -1,16 +1,13 @@
 ﻿@model Employee;
-
 @{
     ViewData["Title"] = "Employee Details";
 }
-
 <div class="d-flex align-items-center mb-2">
     <h4 class="me-auto mb-0">Employee Details</h4>
     <a class="btn btn-outline-primary btn-sm m-1" role="button" asp-controller="Employee" asp-action="Index">Back</a>
     <a class="btn btn-warning btn-sm m-1" role="button" asp-controller="Employee" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
     <a class="btn btn-danger btn-sm m-1" role="button" data-bs-toggle="modal" data-bs-target="#confirmDelete">Delete</a>
 </div>
-
 <div class="card">
     <div class="card-body">
         <div class="row mb-3 g-2 align-items-center">
@@ -37,9 +34,16 @@
                 <span>@Model.DateOfBirth.ToString("dd/MM/yyyy")</span>
             </div>
         </div>
+        <div class="row mb-3 g-2 align-items-center">
+            <div class="col-sm-2">
+                <span>Favourite Drink:</span>
+            </div>
+            <div class="col-sm-3">
+                <span>@(Model.FavouriteDrink?.Name ?? "Not specified")</span>
+            </div>
+        </div>
     </div>
 </div>
-
 <div class="modal fade" id="confirmDelete" tabindex="-1" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">

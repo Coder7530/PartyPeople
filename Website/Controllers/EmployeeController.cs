@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Website.Models;
 using Website.Persistence;
 
@@ -29,11 +30,15 @@ namespace Website.Controllers
         // GET: Employee/Details/5
         public async Task<ActionResult> Details(int id, CancellationToken cancellationToken)
         {
-            var exists = await _dbContext.Employees.ExistsAsync(id, cancellationToken);
-            if (!exists)
+            var employee = await _dbContext.Employees.GetByIdAsync(id, cancellationToken);
+            if (employee == null)
                 return NotFound();
 
-            var employee = await _dbContext.Employees.GetByIdAsync(id, cancellationToken);
+            if (employee.FavouriteDrinkId.HasValue)
+            {
+                employee.FavouriteDrink = await _dbContext.Drinks.GetByIdAsync(employee.FavouriteDrinkId.Value, cancellationToken);
+            }
+
             return View(employee);
         }
 
@@ -64,11 +69,13 @@ namespace Website.Controllers
         // GET: Employee/Edit/5
         public async Task<ActionResult> Edit(int id, CancellationToken cancellationToken)
         {
-            var exists = await _dbContext.Employees.ExistsAsync(id, cancellationToken);
-            if (!exists)
+            var employee = await _dbContext.Employees.GetByIdAsync(id, cancellationToken);
+            if (employee == null)
                 return NotFound();
 
-            var employee = await _dbContext.Employees.GetByIdAsync(id, cancellationToken);
+            var drinks = await _dbContext.Drinks.GetAllAsync(cancellationToken);
+            ViewBag.Drinks = new SelectList(drinks, "Id", "Name", employee.FavouriteDrinkId);
+
             return View(employee);
         }
 
@@ -77,16 +84,19 @@ namespace Website.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(int id, Employee employee, CancellationToken cancellationToken)
         {
-            var validationResult = await _validator.ValidateAsync(employee, cancellationToken);
+            if (id != employee.Id)
+                return NotFound();
 
+            var validationResult = await _validator.ValidateAsync(employee, cancellationToken);
             if (!validationResult.IsValid)
             {
                 validationResult.AddToModelState(ModelState);
+                var drinks = await _dbContext.Drinks.GetAllAsync(cancellationToken);
+                ViewBag.Drinks = new SelectList(drinks, "Id", "Name", employee.FavouriteDrinkId);
                 return View(employee);
             }
 
             var updatedEmployee = await _dbContext.Employees.UpdateAsync(employee, cancellationToken);
-
             return RedirectToAction(nameof(Details), new { id = updatedEmployee.Id });
         }
 

@@ -44,20 +44,32 @@ public class EmployeeRepository : RepositoryBase
     /// <param name="id">The ID of the employee to get.</param>
     /// <param name="cancellationToken">A token which can be used to cancel asynchronous operations.</param>
     /// <returns>An awaitable task whose result is the employee if found, otherwise <see langword="null"/>.</returns>
-    public async ValueTask<Employee?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
+    public async Task<Employee> GetByIdAsync(int id, CancellationToken cancellationToken = default)
     {
-        var parameters = new
-        {
-            Id = id
-        };
-
+        var parameters = new { Id = id };
         var command = new CommandDefinition(
-            "[api].[spEmployeeGet]",
+            @"SELECT e.*, d.Id as DrinkId, d.Name as DrinkName, d.Description as DrinkDescription
+              FROM [dbo].[Employee] e
+              LEFT JOIN [dbo].[Drink] d ON e.FavouriteDrinkId = d.Id
+              WHERE e.Id = @Id",
             parameters: parameters,
-            commandType: CommandType.StoredProcedure,
+            commandType: CommandType.Text,
             cancellationToken: cancellationToken);
 
-        return await Connection.QuerySingleOrDefaultAsync<Employee>(command);
+        var result = await Connection.QueryAsync<Employee, Drink, Employee>(
+            command,
+            (employee, drink) =>
+            {
+                if (drink != null && drink.Id != 0)
+                {
+                    employee.FavouriteDrinkId = drink.Id;
+                    employee.FavouriteDrink = drink;
+                }
+                return employee;
+            },
+            splitOn: "DrinkId");
+
+        return result.SingleOrDefault();
     }
 
     /// <summary>
@@ -119,18 +131,40 @@ public class EmployeeRepository : RepositoryBase
             employee.Id,
             employee.FirstName,
             employee.LastName,
-            employee.DateOfBirth
+            employee.DateOfBirth,
+            employee.FavouriteDrinkId
         };
 
         var command = new CommandDefinition(
-            "[api].[spEmployeeUpdate]",
+            @"UPDATE [dbo].[Employee]
+              SET FirstName = @FirstName, 
+                  LastName = @LastName, 
+                  DateOfBirth = @DateOfBirth, 
+                  FavouriteDrinkId = @FavouriteDrinkId
+              WHERE Id = @Id;
+              
+              SELECT e.*, d.Id as DrinkId, d.Name as DrinkName, d.Description as DrinkDescription
+              FROM [dbo].[Employee] e
+              LEFT JOIN [dbo].[Drink] d ON e.FavouriteDrinkId = d.Id
+              WHERE e.Id = @Id",
             parameters: parameters,
-            commandType: CommandType.StoredProcedure,
+            commandType: CommandType.Text,
             cancellationToken: cancellationToken);
 
-        var updatedEmployee = await Connection.QuerySingleAsync<Employee>(command);
+        var result = await Connection.QueryAsync<Employee, Drink, Employee>(
+            command,
+            (employee, drink) =>
+            {
+                if (drink != null)
+                {
+                    employee.FavouriteDrinkId = drink.Id;
+                    employee.FavouriteDrink = drink;
+                }
+                return employee;
+            },
+            splitOn: "DrinkId");
 
-        return updatedEmployee;
+        return result.Single();
     }
 
     /// <summary>
@@ -153,4 +187,6 @@ public class EmployeeRepository : RepositoryBase
 
         await Connection.ExecuteAsync(command);
     }
+
+
 }

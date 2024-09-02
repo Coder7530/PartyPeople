@@ -96,6 +96,7 @@ public class EventRepository : RepositoryBase
     {
         var parameters = new
         {
+            @event.Id,
             @event.Description,
             @event.StartDateTime,
             @event.EndDateTime,

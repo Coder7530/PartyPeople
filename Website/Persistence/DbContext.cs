@@ -16,6 +16,16 @@ public class DbContext
     public EventRepository Events { get; }
 
     /// <summary>
+    /// Gets a repository for accessing event employees.
+    /// </summary>
+    public EventEmployeeRepository EventEmployee { get; }
+
+    /// <summary>
+    /// Gets a repository for accessing drinks.
+    /// </summary>
+    public DrinkRepository Drinks { get; }
+
+    /// <summary>
     /// Initialises a new instance of the <see cref="DbContext"/> class.
     /// </summary>
     /// <param name="connectionFactory">The database connection factory to use for database repositories.</param>
@@ -26,6 +36,8 @@ public class DbContext
 
         Employees = new EmployeeRepository(_connectionProvider);
         Events = new EventRepository(_connectionProvider);
+        EventEmployee = new EventEmployeeRepository(_connectionProvider);
+        Drinks = new DrinkRepository(_connectionProvider);
     }
 
 
