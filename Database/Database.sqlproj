@@ -80,5 +80,9 @@
     <Build Include="api\Stored Procedures\spEventUpdate.sql" />
     <Build Include="api\Stored Procedures\spEventDelete.sql" />
     <Build Include="Security\api.sql" />
+    <Build Include="dbo\Tables\EventEmployees.sql" />
+    <Build Include="api\Stored Procedures\spEventEmployeeList.sql" />
+    <Build Include="api\Stored Procedures\spEventEmployeeAdd.sql" />
+    <Build Include="api\Stored Procedures\spEventEmployeeRemove.sql" />
   </ItemGroup>
 </Project>

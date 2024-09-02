@@ -37,4 +37,11 @@ public class Event
     /// </remarks>
     [DisplayName("Maximum Capacity")]
     public int? MaximumCapacity { get; init; }
+
+    /// <summary>
+    /// List of employees attending the event
+    /// </summary>
+    [DisplayName("Employees to Attend")]
+    public List<Employee> AssociatedEmployees { get; set; } = new List<Employee>();
+
 }
