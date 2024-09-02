@@ -63,6 +63,8 @@
     <Folder Include="api\" />
     <Folder Include="api\Stored Procedures\" />
     <Folder Include="Security\" />
+    <Folder Include="Scripts" />
+    <Folder Include="Scripts\Post" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\Event.sql" />
@@ -84,5 +86,15 @@
     <Build Include="api\Stored Procedures\spEventEmployeeList.sql" />
     <Build Include="api\Stored Procedures\spEventEmployeeAdd.sql" />
     <Build Include="api\Stored Procedures\spEventEmployeeRemove.sql" />
+    <Build Include="dbo\Tables\Drink.sql" />
+    <PostDeploy Include="Scripts\Post\Table.AlterEmployee.sql" />
+    <Build Include="api\Stored Procedures\spDrinkCreate.sql" />
+    <Build Include="api\Stored Procedures\spDrinkUpdate.sql" />
+    <Build Include="api\Stored Procedures\spDrinkDelete.sql" />
+    <Build Include="api\Stored Procedures\spDrinkGet.sql" />
+    <Build Include="api\Stored Procedures\spDrinkList.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Scripts\Script.PostDeployment.sql" />
   </ItemGroup>
 </Project>

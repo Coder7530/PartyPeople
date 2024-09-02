@@ -29,4 +29,12 @@ public class Employee
     /// </summary>
     [DisplayName("Date of Birth")]
     public required DateOnly DateOfBirth { get; init; }
+
+    /// <summary>
+    /// The favourite drink for this employee model.
+    /// </summary>
+    [DisplayName("Favourite Drink")]
+    public int? FavouriteDrinkId { get; set; }
+
+    public Drink FavouriteDrink { get; set; }
 }
